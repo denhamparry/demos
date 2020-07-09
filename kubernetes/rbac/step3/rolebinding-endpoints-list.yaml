@@ -1,13 +1,12 @@
----
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
   name: endpoints-list-binding
   namespace: development
 subjects:
-- kind: ServiceAccount
-  name: endpoint-service-account
-  namespace: development
+- kind: User
+  name: lewis
+  apiGroup: ""
 roleRef:
   kind: Role
   name: endpoints-list

@@ -2,11 +2,11 @@
 
 SHELL=/bin/bash
 
-cluster = rbac
-location = /home/lewis/git/denhamparry/demos/kubernetes/rbac/step2/
+cluster = application
+location = /home/lewis/git/denhamparry/demos/kubernetes/rbac/step3/
 demofolder = demo
 
-all: 00_setup 99_clean
+all: 00_setup 01_demo 02_user 03_setup_rbac 04_test_application 99_clean
 .PHONY: all
 
 .PHONY: 00_setup
@@ -15,47 +15,40 @@ all: 00_setup 99_clean
 	kubectl get nodes
 	mkdir -p $(location)/$(demofolder)
 	kubectl apply -f nginx.yaml
-	echo "Wait for nginx pods..." && \
-	sleep 10 && \
 	kubectl get pods -n development
 
-.PHONY: 01_build
-01_build:
-	eval $$(minikube -p $(cluster) docker-env) && \
-	docker build -t endpoints/python:0.0.1 . && \
-	echo -e "\nImage is now in Minikube Docker Daemon\n" && \
-	docker image ls | grep "endpoints"
+.PHONY: 01_demo
+01_demo:
+	python endpoints.py
 
-.PHONY: 02_deploy
-02_deploy:
-	kubectl apply -f endpoints-pod.yaml
-	sleep 4 && \
-	kubectl get pods -n development && \
-	kubectl logs -n development endpoints-pod && \
-	kubectl get sa -n development && \
-	kubectl describe sa default -n development
+.PHONY: 02_user
+02_user:
+	openssl genrsa -out $(location)$(demofolder)/lewis.key 2048
+	openssl req -new -key $(location)$(demofolder)/lewis.key -out $(location)$(demofolder)/lewis.csr -subj "/CN=lewis/O=trainer"
+	openssl x509 -req -in $(location)$(demofolder)/lewis.csr -CA ~/.minikube/ca.crt -CAkey ~/.minikube/ca.key -CAcreateserial -out $(location)$(demofolder)/lewis.crt -days 500
+	kubectl config set-credentials lewis --client-certificate=demo/lewis.crt  --client-key=demo/lewis.key
+	kubectl config set-credentials lewis --client-certificate=$(demofolder)/lewis.crt  --client-key=$(demofolder)/lewis.key
+	kubectl config set-context lewis-context --cluster=$(cluster) --namespace=development --user=lewis
+	kubectl config view
+	kubectl config use-context lewis-context
 
-.PHONY: 03_sa
-03_sa:
-	kubectl apply -f serviceaccount.yaml
-	kubectl get sa -n development
-
-.PHONY: 04_rbac
-04_rbac:
-	kubectl apply -f role-endpoints-list.yaml
+.PHONY: 03_setup_rbac
+03_setup_rbac:
+	kubectl config use-context $(cluster)
+	kubectl create -f role-endpoints-list.yaml
+	kubectl create -f rolebinding-endpoints-list.yaml
+	sleep 5
 	kubectl get roles -n development
-	kubectl apply -f rolebinding-endpoints-list.yaml
 	kubectl get rolebindings -n development
 
-.PHONY: 05_sa_pod
-05_sa_pod:
-	kubectl delete -f endpoints-pod.yaml
-	kubectl apply -f endpoints-pod-sa.yaml
-	sleep 2
-	kubectl get pods -n development
-	kubectl logs -n development endpoints-pod
-	
+.PHONY: 04_test_application
+04_test_application:
+	kubectl config use-context lewis-context
+	python endpoints.py
+
 .PHONY: 99_clean
 99_clean:
+	kubectl config delete-context lewis-context
+	kubectl config unset users.lewis
 	rm -rf $(location)$(demofolder)
 	minikube delete -p $(cluster)
