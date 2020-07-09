@@ -14,18 +14,18 @@ $ minikube start
 ```
 
 ```bash
-$ kubectl create namespace office
+$ kubectl create namespace development
 ```
 
 ```bash
 $ openssl genrsa -out employee.key 2048
-$ openssl req -new -key employee.key -out employee.csr -subj "/CN=employee/O=bitnami"
+$ openssl req -new -key employee.key -out employee.csr -subj "/CN=employee/O=controlplane"
 $ openssl x509 -req -in employee.csr -CA CA_LOCATION/ca.crt -CAkey CA_LOCATION/ca.key -CAcreateserial -out employee.crt -days 500
 ```
 
 ```bash
 $ kubectl config set-credentials employee --client-certificate=/home/employee/.certs/employee.crt  --client-key=/home/employee/.certs/employee.key
-$ kubectl config set-context employee-context --cluster=minikube --namespace=office --user=employee
+$ kubectl config set-context employee-context --cluster=minikube --namespace=development --user=employee
 $ kubectl --context=employee-context get pods
 ```
 
@@ -35,7 +35,7 @@ $ kubectl --context=employee-context get pods
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
-  namespace: office
+  namespace: development
   name: deployment-manager
 rules:
 - apiGroups: ["", "extensions", "apps"]
@@ -54,7 +54,7 @@ kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
   name: deployment-manager-binding
-  namespace: office
+  namespace: development
 subjects:
 - kind: User
   name: employee
@@ -72,7 +72,7 @@ $ kubectl create -f rolebinding-deployment-manager.yaml
 #### Testing RBAC
 
 ```bash
-kubectl --context=employee-context run --image bitnami/dokuwiki mydokuwiki
+kubectl --context=employee-context run --image controlplane/dokuwiki mydokuwiki
 kubectl --context=employee-context get pods
 ```
 
@@ -82,4 +82,4 @@ kubectl --context=employee-context get pods --namespace=default
 
 ## References
 
-- [Configure RBAC in your Kubernetes Cluster](https://docs.bitnami.com/tutorials/configure-rbac-in-your-kubernetes-cluster/)
+- [Configure RBAC in your Kubernetes Cluster](https://docs.controlplane.com/tutorials/configure-rbac-in-your-kubernetes-cluster/)

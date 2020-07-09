@@ -12,19 +12,19 @@ all: 00_setup 01_certificates 02_set_context 03_setup_rbac 04_deploy 05_test_emp
 	minikube start -p $(cluster)
 	kubectl get nodes
 	mkdir -p $(location)/$(demofolder)
-	kubectl create namespace office
+	kubectl create namespace development
 
 .PHONY: 01_certificates
 01_certificates:
 	openssl genrsa -out $(location)$(demofolder)/employee.key 2048
-	openssl req -new -key $(location)$(demofolder)/employee.key -out $(location)$(demofolder)/employee.csr -subj "/CN=employee/O=bitnami"
+	openssl req -new -key $(location)$(demofolder)/employee.key -out $(location)$(demofolder)/employee.csr -subj "/CN=employee/O=controlplane"
 	openssl x509 -req -in $(location)$(demofolder)/employee.csr -CA ~/.minikube/ca.crt -CAkey ~/.minikube/ca.key -CAcreateserial -out $(location)$(demofolder)/employee.crt -days 500
 
 .PHONY: 02_set_context
 02_set_context:
 	kubectl config set-credentials employee --client-certificate=demo/employee.crt  --client-key=demo/employee.key
 	kubectl config set-credentials employee --client-certificate=$(demofolder)/employee.crt  --client-key=$(demofolder)/employee.key
-	kubectl config set-context employee-context --cluster=rbac --namespace=office --user=employee
+	kubectl config set-context employee-context --cluster=rbac --namespace=development --user=employee
 	kubectl config view
 
 .PHONY: 03_setup_rbac
@@ -36,7 +36,7 @@ all: 00_setup 01_certificates 02_set_context 03_setup_rbac 04_deploy 05_test_emp
 .PHONY: 04_deploy
 04_deploy:
 	sleep 10
-	kubectl --context=employee-context run --namespace office --image bitnami/dokuwiki mydokuwiki
+	kubectl --context=employee-context run --namespace development --image nginx/nginx:1.19.0 nginx
 
 .PHONY: 05_test_employee
 05_test_employee:
