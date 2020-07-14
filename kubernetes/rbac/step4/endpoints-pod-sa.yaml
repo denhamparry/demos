@@ -10,4 +10,4 @@ spec:
   serviceAccountName: endpoint-service-account
   containers:
     - name: endpoints
-      image: endpoints/python:0.0.1
+      image: endpoints/python:0.0.2
