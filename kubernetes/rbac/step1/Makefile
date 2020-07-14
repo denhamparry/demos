@@ -10,7 +10,7 @@ all: 00_setup 01_certificates 02_set_context 03_setup_rbac 04_deploy 05_test_lew
 .PHONY: all
 
 .PHONY: 00_setup
-00_setup: 99_clean
+00_setup:
 	minikube start -p $(cluster)
 	kubectl get nodes
 	mkdir -p $(location)/$(demofolder)
