@@ -3,7 +3,7 @@
 SHELL=/bin/bash
 
 cluster = clusterrole
-location = /home/lewis/git/denhamparry/demos/kubernetes/rbac/step2/
+location = $(shell pwd)/
 demofolder = demo
 
 all: 00_setup 01_certificates 02_setup_rbac 03_test_lewis 99_clean

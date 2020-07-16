@@ -3,14 +3,14 @@
 SHELL=/bin/bash
 
 cluster = roles
-location = /home/lewis/git/denhamparry/demos/kubernetes/rbac/step1/
+location = $(shell pwd)/
 demofolder = demo
 
 all: 00_setup 01_certificates 02_set_context 03_setup_rbac 04_deploy 05_test_lewis 99_clean
 .PHONY: all
 
 .PHONY: 00_setup
-00_setup: 99_clean
+00_setup:
 	minikube start -p $(cluster)
 	kubectl get nodes
 	mkdir -p $(location)/$(demofolder)
@@ -49,3 +49,14 @@ all: 00_setup 01_certificates 02_set_context 03_setup_rbac 04_deploy 05_test_lew
 	kubectl config unset users.lewis
 	rm -rf $(location)$(demofolder)
 	minikube delete -p $(cluster)
+
+.PHONY: demo
+demo: demo_00_setup demo_01_certificates 
+
+.PHONY: demo_00_setup
+demo_00_setup:
+	docker run -it -v $(location).asciinema/00_setup.cast:/root/cast denhamparry/asciinema-client:latest
+
+.PHONY: demo_01_certificates
+demo_01_certificates:
+	docker run -it -v $(location).asciinema/01_certificates.cast:/root/cast denhamparry/asciinema-client:latest

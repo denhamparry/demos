@@ -3,14 +3,12 @@
 SHELL=/bin/bash
 
 cluster = deploy
-location = /home/lewis/git/denhamparry/demos/kubernetes/rbac/step4/
-demofolder = demo
 
 all: 00_setup 01_build 02_deploy 03_redeploy 04_sa 05_rbac 06_sa_pod 99_clean
 .PHONY: all
 
 .PHONY: 00_setup
-00_setup: 99_clean
+00_setup:
 	minikube start -p $(cluster)
 	kubectl get nodes
 	mkdir -p $(location)/$(demofolder)
@@ -22,7 +20,7 @@ all: 00_setup 01_build 02_deploy 03_redeploy 04_sa 05_rbac 06_sa_pod 99_clean
 .PHONY: 01_build
 01_build:
 	eval $$(minikube -p $(cluster) docker-env) && \
-	docker build -t endpoints/python:0.0.1 . && \
+	docker build -t endpoints/python:0.0.1 -f Dockerfile . && \
 	echo -e "\nImage is now in Minikube Docker Daemon\n" && \
 	docker image ls | grep "endpoints"
 
@@ -37,8 +35,9 @@ all: 00_setup 01_build 02_deploy 03_redeploy 04_sa 05_rbac 06_sa_pod 99_clean
 
 .PHONY: 03_redeploy
 03_redeploy:
+	eval $$(minikube -p $(cluster) docker-env) && \
 	kubectl delete -f endpoints-pod.yaml
-	docker build -t endpoints/python:0.0.1 . && \
+	docker build -t endpoints/python:0.0.2 -f Dockerfile-sa . && \
 	kubectl apply -f endpoints-pod.yaml
 
 .PHONY: 04_sa
@@ -67,5 +66,4 @@ all: 00_setup 01_build 02_deploy 03_redeploy 04_sa 05_rbac 06_sa_pod 99_clean
 99_clean:
 	kubectl config delete-context lewis-context
 	kubectl config unset users.lewis
-	rm -rf $(location)$(demofolder)
 	minikube delete -p $(cluster)

@@ -3,14 +3,14 @@
 SHELL=/bin/bash
 
 cluster = application
-location = /home/lewis/git/denhamparry/demos/kubernetes/rbac/step3/
+location = $(shell pwd)/
 demofolder = demo
 
 all: 00_setup 01_demo 02_user 03_setup_rbac 04_test_application 99_clean
 .PHONY: all
 
 .PHONY: 00_setup
-00_setup: 99_clean
+00_setup:
 	minikube start -p $(cluster)
 	kubectl get nodes
 	mkdir -p $(location)/$(demofolder)
