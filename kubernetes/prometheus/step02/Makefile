@@ -14,9 +14,9 @@ demo: demo_00_setup
 00_setup:
 	minikube start -p metrics
 
-.PHONY: 01_setup_namespace
+.PHONY: 01_setup_metrics
 01_setup_metrics:
-	kubectl create -f ./namespaces.yaml
+	kubectl create -f ./metrics-server
 
 .PHONY: 02_view_metrics
 02_view_metrics:
@@ -29,7 +29,7 @@ demo: demo_00_setup
 
 .PHONY: 04_review_metrics
 04_review_metrics:
-	kubectl get --raw "/apis/metrics.k8s.io/v1beta1/pods" | jq . | grep podinfo
+	kubectl get --raw "/apis/metrics.k8s.io/v1beta1/pods" | jq . | grep --color=auto -A 8 podinfo
 
 .PHONY: 05_deploy_hpa
 05_deploy_hpa:

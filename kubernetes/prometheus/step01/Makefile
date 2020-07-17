@@ -19,7 +19,9 @@ demo: demo_00_setup demo_01_start_application
 .PHONY: 01_start_application
 01_start_application:
 
+	clear
 	echo -e  ""
+
 	echo -e  "************"
 	echo -e  "We are building a Go application to expose custom metrics"
 	echo -e  "The application can be seen in main.go"
@@ -58,8 +60,8 @@ demo: demo_00_setup demo_01_start_application
 	echo -e  "************"
 	echo -e  "Using grep we can easily find the metric"
 	echo -e  "Congratulations!  You can now share custom metrics via an endpoint"
-	echo -e  "Why is this important?  What can we do with the metric?  Let's find out in the next section"
-	echo -e  "But first, let's kill the app :)"
+	echo -e  "Why is this important?  What can we do with the metric?"
+	echo -e  "Let's kill the app and run make 02_docker:)"
 	echo -e  "************"
 	echo -e  ""
 	read  -n 1 -p "Press any key to continue..."
@@ -153,7 +155,7 @@ demo: demo_00_setup demo_01_start_application
 	echo -e  "\n\n"
 
 	echo -e  "************"
-	echo -e  "All looks good, lets stop and remove the container"
+	echo -e  "All looks good, lets stop and remove the container and continue with make 03_podinfo"
 	echo -e  "************"
 	echo -e  "\n\n"
 	read  -n 1 -p "Press any key to continue..."
@@ -161,8 +163,47 @@ demo: demo_00_setup demo_01_start_application
 
 	docker stop metrics-demo
 	docker rm metrics-demo
+	echo -e  "\n\n"
 
+.PHONY: 03_podinfo
+03_podinfo:
 
+	clear
+	echo -e  "\n\n"
+
+	echo -e  "************"
+	echo -e  "We'll use another app that has bit more information during the rest of the demo"
+	echo -e  "************"
+	echo -e  "\n\n"
+	read  -n 1 -p "Press any key to continue..."
+	echo -e  "\n\n"
+
+	docker run --name podinfo-demo -dp 9898:9898 stefanprodan/podinfo
+
+	echo -e  "************"
+	echo -e  "Have a look at the application on http://localhost:9898"
+	echo -e  "************"
+	echo -e  "\n\n"
+	read  -n 1 -p "Press any key to continue..."
+	echo -e  "\n\n"
+
+	echo -e  "************"
+	echo -e  "You can view the metrics via http://localhost:9898/metrics"
+	echo -e  "************"
+	echo -e  "\n\n"
+	read  -n 1 -p "Press any key to continue..."
+	echo -e  "\n\n"
+
+	echo -e  "************"
+	echo -e  "Lets kill the container and go to the next step!"
+	echo -e  "************"
+	echo -e  "\n\n"
+	read  -n 1 -p "Press any key to continue..."
+	echo -e  "\n\n"
+
+	docker stop podinfo-demo
+	docker rm podinfo-demo
+	echo -e  "\n\n"
 
 .PHONY: demo_00_setup
 demo_00_setup:
