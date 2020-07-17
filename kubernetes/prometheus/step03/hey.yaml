@@ -1,0 +1,13 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hey
+spec:
+  template:
+    spec:
+      containers:
+      - name: hey
+        image: ricoli/hey
+        command: ["-n 100 -q 5 -c 5 http://podinfo:9898"]
+      restartPolicy: Never
+  backoffLimit: 4

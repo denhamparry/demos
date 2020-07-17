@@ -4,3 +4,11 @@ kubernetes/rbac/step3/demo
 kubernetes/rbac/step4/demo
 kubernetes/rbac/step5/demo
 kubernetes/rbac/step5/rbac.html
+
+apiserver-key.pem
+apiserver.csr
+apiserver.pem
+metrics-ca-config.json
+metrics-ca.crt
+metrics-ca.key
+cm-adapter-serving-certs.yaml
