@@ -1,3 +1,3 @@
 #!/bin/bash
 
-minikube delete -p demo-cluster
+minikube delete -p curl-cluster

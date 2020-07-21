@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function 00_minikube {
-    minikube start -p demo-cluster
+    minikube start -p curl-cluster
 }
 
 

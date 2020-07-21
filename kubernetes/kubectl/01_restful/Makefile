@@ -1,9 +1,32 @@
+.ONESHELL:
 
-	# $(location)/script/99_cleanup.sh
-	# echo -e  "************"
-	# echo -e  "When spinning up a cluster, a config file is created within `~/.kube/"
-	# echo -e  "This is the default configuration used by Kubectl to connect to a cluster"
-	# echo -e  "Let's look at the file"
-	# echo -e  "************"
-	# echo -e  ""
-	# read  -n 1 -p "Press any key to continue..."
+SHELL=/bin/bash
+
+location = $(shell pwd)
+
+.PHONY: all
+all: run
+
+.PHONY: setup
+setup:
+	$(location)/script/00_main.sh setup
+
+.PHONY: setup-walkthrough
+setup-walkthrough:
+	$(location)/script/00_main.sh setup-walkthrough
+
+.PHONY: run
+run:
+	$(location)/script/00_main.sh run
+	
+.PHONY: run-walkthrough
+run-walkthrough:
+	$(location)/script/00_main.sh run-walkthrough
+	
+.PHONY: demo
+demo:
+	$(location)/script/00_main.sh demo
+	
+.PHONY: cleanup
+cleanup:
+	$(location)/script/00_main.sh cleanup
