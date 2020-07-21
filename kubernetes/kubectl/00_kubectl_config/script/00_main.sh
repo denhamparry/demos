@@ -7,7 +7,8 @@ function setup {
 }
 
 function setup-walkthorugh {
-    echo -e "\\n\\t00_setup\\n"
+	clear
+    echo -e "\\n\\nSetup\\n"
     echo "- Move any existing kube config file to set clean setup"
 	echo "- Create a minikube cluster called Kubectl"
     echo -e "\\n"
@@ -30,8 +31,50 @@ function run {
     "$dir_path"/02_config.sh
 }
 
-function run-walkthorugh {
-    "$dir_path"/02_config.sh
+function run-walkthrough {
+	clear
+    echo -e "\\n\\nConfig - What we're going to do\\n"
+    echo "- View the local kube config file"
+	echo -e "- Review each part of the config file\\n"
+	read -r -n 1 -p "Press any key to continue..."
+	
+	echo -e "\\n\\n"
+	echo "The default config file is within the .kube directory found in your home folder (when using linux)"
+	echo "The config file holds all the information that is required to connect to the Kubernetes cluster"
+	echo -e "We'll start by viewing the contents of the file\\n"
+	read -r -n 1 -p "Press any key to continue..."
+	echo -e "\\n\\n"
+
+    "$dir_path"/02_config.sh 00_view_config
+	echo -e "\\n\\n"
+	echo "We can see that this is a yaml file, yaml files are used frequently within kubenetes"
+	echo -e "There are 4 main sections that we're going to look at now:\\n"
+	echo -e "\\t - clusters"
+	echo -e "\\t - users"
+	echo -e "\\t - contexts"
+	echo -e "\\t - current-context\\n"
+	read -r -n 1 -p "Press any key to continue..."
+	echo -e "\\n\\n"
+
+    "$dir_path"/02_config.sh 01_view_clusters
+	echo -e "\\n\\n"
+	read -r -n 1 -p "Press any key to continue..."
+	echo -e "\\n\\n"
+	
+    "$dir_path"/02_config.sh 02_view_users
+	echo -e "\\n\\n"
+	read -r -n 1 -p "Press any key to continue..."
+	echo -e "\\n\\n"
+
+    "$dir_path"/02_config.sh 03_view_contexts
+	echo -e "\\n\\n"
+	read -r -n 1 -p "Press any key to continue..."
+	echo -e "\\n\\n"
+
+    "$dir_path"/02_config.sh 04_view_current_context
+	echo -e "\\n\\n"
+	read -r -n 1 -p "Press any key to continue..."
+	echo -e "\\n\\n"
 }
 
 function demo {
@@ -43,10 +86,10 @@ function cleanup {
 }
 
 usage() {
-	echo -e "00_setup.sh\\n\\tKubectl 00_setup\\n"
+	echo -e "\\n\\tKubectl config\\n"
 	echo "Usage:"
 	echo "  setup                                   - run setup scripts"
-	echo "  setup-walkthrough                       - run setup scripts"
+	echo "  setup-walkthrough                       - run setup scripts with explanation"
 	echo "  run                                     - run the exercise scripts"
 	echo "  run-walkthrough                         - run the exercise scripts with explanation"
     echo "  demo                                    - view the demo without having to run setup"
