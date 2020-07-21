@@ -58,27 +58,39 @@ function run-walkthrough {
 
     "$dir_path"/02_config.sh 01_view_clusters
 	echo -e "\\n\\n"
+	echo -e "Here is the cluster that we've recently setup"
+	echo -e "We can see the Certificate Authority (CA), the CA is used to sign the certificates that are used to authenticate the user (you!)"
+	echo -e "The server is the address to reach the API within your Kubernetes Control Plane"
+	echo -e "Finally, the friendly name is a name that we can reference this cluster with, this is local to the config file and you can change it if you wanted"
 	read -r -n 1 -p "Press any key to continue..."
 	echo -e "\\n\\n"
 	
     "$dir_path"/02_config.sh 02_view_users
 	echo -e "\\n\\n"
+	echo -e "Now we're focusing on the user, you!"
+	echo -e "Kubernetes doensn't have a user database, but instead signs certificates to authenticate who you are"
+	echo -e "In this example, the client.crt and the client.key are files on the local file system, you can also find certificates embedded within the config"
+	echo -e "A friendly name of demo-cluster has been assigend to the userm this is used to identify the user within the config file, not within Kubernetes"
 	read -r -n 1 -p "Press any key to continue..."
 	echo -e "\\n\\n"
 
     "$dir_path"/02_config.sh 03_view_contexts
 	echo -e "\\n\\n"
+	echo -e "We have seen that the config file can have clusters and users, contexts are used to join them together"
+	echo -e "In this instance, we're linking our cluster and user together, with the friendly name of demo-cluster"
 	read -r -n 1 -p "Press any key to continue..."
 	echo -e "\\n\\n"
 
     "$dir_path"/02_config.sh 04_view_current_context
 	echo -e "\\n\\n"
+	echo -e "A config file can have multple clusters, users and contexts."
+	echo -e "current-cluster is used to identify which context is being used by default"
 	read -r -n 1 -p "Press any key to continue..."
 	echo -e "\\n\\n"
 }
 
 function demo {
-    docker run -it -v "$dir_path"/.asciinema/00_setup.cast:/root/cast denhamparry/asciinema-client:latest
+    docker run -it -v "$dir_path"/.asciinema/run_walkthrough.cast:/root/cast denhamparry/asciinema-client:latest
 }
 
 function cleanup {
