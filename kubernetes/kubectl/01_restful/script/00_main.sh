@@ -25,7 +25,36 @@ function run-walkthrough {
 	echo -e "TODO"
 	read -r -n 1 -p "Press any key to continue..."
 	echo -e "\\n\\n"
-    "$dir_path"/02_curl.sh
+    "$dir_path"/02_curl.sh 00_view_config
+	echo -e "\\n\\n"
+	echo -e "TODO"
+	read -r -n 1 -p "Press any key to continue..."
+	echo -e "\\n\\n"
+    "$dir_path"/02_curl.sh 01_curl_cluster
+	echo -e "\\n\\n"
+	echo -e "TODO"
+	read -r -n 1 -p "Press any key to continue..."
+	echo -e "\\n\\n"
+    "$dir_path"/02_curl.sh 02_curl_pods
+	echo -e "\\n\\n"
+	echo -e "TODO"
+	read -r -n 1 -p "Press any key to continue..."
+	echo -e "\\n\\n"
+    "$dir_path"/02_curl.sh 03_curl_deployment
+	echo -e "\\n\\n"
+	echo -e "TODO"
+	read -r -n 1 -p "Press any key to continue..."
+	echo -e "\\n\\n"
+    "$dir_path"/02_curl.sh 04_curl_post
+	echo -e "\\n\\n"
+	echo -e "TODO"
+	read -r -n 1 -p "Press any key to continue..."
+	echo -e "\\n\\n"
+    "$dir_path"/02_curl.sh 05_curl_delete
+	echo -e "\\n\\n"
+	echo -e "TODO"
+	read -r -n 1 -p "Press any key to continue..."
+	echo -e "\\n\\n"
 }
 
 function demo {
