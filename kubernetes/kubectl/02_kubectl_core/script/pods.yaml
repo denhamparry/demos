@@ -1,0 +1,84 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-demo-0
+  labels:
+    app: nginx
+    pod: "0"
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    ports:
+    - containerPort: 80
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-demo-1
+  labels:
+    app: nginx
+    pod: "1"
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    ports:
+    - containerPort: 80
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-demo-2
+  labels:
+    app: nginx
+    pod: "2"
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    ports:
+    - containerPort: 80
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-demo-3
+  labels:
+    app: nginx
+    pod: "3"
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    ports:
+    - containerPort: 80
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-demo-4
+  labels:
+    app: nginx
+    pod: "4"
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    ports:
+    - containerPort: 80
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-demo-5
+  labels:
+    app: nginx
+    pod: "5"
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    ports:
+    - containerPort: 80
