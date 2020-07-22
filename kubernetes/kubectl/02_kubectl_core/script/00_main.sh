@@ -37,6 +37,41 @@ function run-walkthrough {
 	read -r -n 1 -p "Press any key to continue..."
 	echo -e "\\n\\n"
     "$dir_path"/02_kubectl.sh 02_kubectl_clusterinfo
+	echo -e "\\n\\n"
+	echo -e "Create a resource from stdin"
+	read -r -n 1 -p "Press any key to continue..."
+	echo -e "\\n\\n"
+    "$dir_path"/02_kubectl.sh 03_kubectl_create_stdin
+	echo -e "\\n\\n"
+	echo -e "Create a resource from a file"
+	read -r -n 1 -p "Press any key to continue..."
+	echo -e "\\n\\n"
+    "$dir_path"/02_kubectl.sh 04_kubectl_create_file
+	echo -e "\\n\\n"
+	echo -e "Display one or many resources"
+	read -r -n 1 -p "Press any key to continue..."
+	echo -e "\\n\\n"
+    "$dir_path"/02_kubectl.sh 05_kubectl_get
+	echo -e "\\n\\n"
+	echo -e "Print the supported API resources on the server"
+	read -r -n 1 -p "Press any key to continue..."
+	echo -e "\\n\\n"
+    "$dir_path"/02_kubectl.sh 06_kubectl_apiresources
+	echo -e "\\n\\n"
+	echo -e "Print the supported API versions on the server, in the form of 'group/version'"
+	read -r -n 1 -p "Press any key to continue..."
+	echo -e "\\n\\n"
+    "$dir_path"/02_kubectl.sh 07_kubectl_apiversions
+	echo -e "\\n\\n"
+	echo -e "Documentation of resources"
+	read -r -n 1 -p "Press any key to continue..."
+	echo -e "\\n\\n"
+    "$dir_path"/02_kubectl.sh 08_kubectl_explain
+
+
+	echo -e "\\n\\n"
+	read -r -n 1 -p "Press any key to continue..."
+
 }
 
 function demo {
@@ -48,7 +83,7 @@ function cleanup {
 }
 
 usage() {
-	echo -e "\\n\\tKubectl config\\n"
+	echo -e "\\n\\tKubectl core\\n"
 	echo "Usage:"
 	echo "  setup                                   - run setup scripts"
 	echo "  setup-walkthrough                       - run setup scripts with explanation"

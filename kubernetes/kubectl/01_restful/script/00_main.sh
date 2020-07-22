@@ -66,7 +66,7 @@ function cleanup {
 }
 
 usage() {
-	echo -e "\\n\\tKubectl config\\n"
+	echo -e "\\n\\tKubectl curl\\n"
 	echo "Usage:"
 	echo "  setup                                   - run setup scripts"
 	echo "  setup-walkthrough                       - run setup scripts with explanation"
