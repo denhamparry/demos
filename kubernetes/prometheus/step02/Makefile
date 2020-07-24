@@ -52,20 +52,3 @@ demo: demo_00_setup
 99_cleanup:
 	kubectl delete -f ./podinfo/podinfo-hpa.yaml,./podinfo/podinfo-svc.yaml,./podinfo/podinfo-dep.yaml,./metrics-server
 	kubectl get all --all-namespaces
-
-.PHONY: demo_00_setup
-demo_00_setup:
-	docker run -it -v $(location).asciinema/00_setup.cast:/root/cast denhamparry/asciinema-client:latest
-
-.PHONY: demo_01_start_application
-demo_01_start_application:
-	
-	clear
-	echo -e  ""
-	echo -e  "************"
-	echo -e  "Lets setup the metrics server"
-	echo -e  "************"
-	echo -e  ""
-	read  -n 1 -p "Press any key to continue..."
-
-	docker run -it -v $(location).asciinema/00_setup.cast:/root/cast denhamparry/asciinema-client:latest

@@ -12,3 +12,4 @@ metrics-ca-config.json
 metrics-ca.crt
 metrics-ca.key
 cm-adapter-serving-certs.yaml
+kubernetes/kubectl/02_kubectl_core/script/clusterinfodump.txt
