@@ -17,7 +17,7 @@ setup-walkthrough:
 
 .PHONY: run
 run:
-	$(location)/script/00_main.sh run
+	$(location)/script/00_main.sh run 
 	
 .PHONY: run-walkthrough
 run-walkthrough:

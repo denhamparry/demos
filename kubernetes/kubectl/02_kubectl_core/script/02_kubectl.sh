@@ -1,44 +1,90 @@
 #!/bin/bash
 
-source ../../../common.sh
+. "$(dirname ${BASH_SOURCE})/../../../../common.sh"
 
 dir_path=$(dirname "$(realpath "$0")")
 
+#####################################################################
+
+function 00_arrange () { : ; }
+function 00_act () { : ; }
+function 00_assert () { 
+	kubectl
+}
+function 00_destroy () { : ; }
 function 00_kubectl {
-	demoheader "Kubectl"
-    demofocus "kubectl"
-	demoend
+	
+	desc "Check the kubectl binary"
+	hide "$(type 00_arrange | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 00_act | sed '1,3d;$d' | sed 's/^ *//g')"
+	show "$(type 00_assert | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 00_destroy | sed '1,3d;$d' | sed 's/^ *//g')"
 }
 
+#####################################################################
+
+function 01_arrange () { : ; }
+function 01_act () { : ; }
+function 01_assert () { 
+	kubectl version
+}
+function 01_destroy () { : ; }
 function 01_kubectl_version {
-	demoheader "Version"
-    demofocus "kubectl version"
-	demoend
+	desc "Check the kubectl binary version and the kubernetes cluster version"
+	hide "$(type 01_arrange | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 01_act | sed '1,3d;$d' | sed 's/^ *//g')"
+	show "$(type 01_assert | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 01_destroy | sed '1,3d;$d' | sed 's/^ *//g')"
 }
 
+#####################################################################
+
+function 02_arrange () { : ; }
+function 02_act () { : ; }
+function 02_assert () { 
+	kubectl cluster-info
+}
+function 02_destroy () { : ; }
 function 02_kubectl_clusterinfo {
-	demoheader "Cluster Information"
-    demofocus "kubectl cluster-info"
-	demoend
+	desc "Cluster Information"
+	hide "$(type 02_arrange | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 02_act | sed '1,3d;$d' | sed 's/^ *//g')"
+	show "$(type 02_assert | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 02_destroy | sed '1,3d;$d' | sed 's/^ *//g')"
 }
 
-function 03_kubectl_create_stdin {
-	demoheader "Create from stdin"
-    demofocus "cat $dir_path/deployment.yaml | kubectl create -f -"
-	x="0"
-	while [ $x != "3" ]
+#####################################################################
+
+function 03_arrange () { : ; }
+function 03_act {
+	< rel_dir/deployment.yaml kubectl create -f -
+}
+function 03_assert () {
+	x=0
+	while [ "$x" != "3" ]
 	do
 		x="$(kubectl get deployments nginx-deployment -o custom-columns=READY:.status.readyReplicas | sed -n 2p)"
-		kubectl get deployments
 		sleep 2
 	done
+}
+function 03_destroy () {
 	kubectl delete deployments nginx-deployment
-	demoend
+}
+function 03_kubectl_create_stdin {
+	desc "Create from stdin"
+	hide "$(type 03_arrange | sed '1,3d;$d' | sed 's/^ *//g')"
+	show "$(type 03_act | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 03_assert | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 03_destroy | sed '1,3d;$d' | sed 's/^ *//g')"
 }
 
-function 04_kubectl_create_file {
-	demoheader "Create from file"
-    demofocus "kubectl create -f $dir_path/deployment.yaml"
+#####################################################################
+
+function 04_arrange () { : ; }
+function 04_act {
+	kubectl create -f rel_dir/deployment.yaml
+}
+function 04_assert () {
 	x=0
 	while [ $x != "3" ]
 	do
@@ -46,21 +92,45 @@ function 04_kubectl_create_file {
 		kubectl get deployments
 		sleep 2
 	done
-	kubectl delete -f "$dir_path"/deployment.yaml
-	demoend
+}
+function 04_destroy () {
+	kubectl delete -f rel_dir/deployment.yaml
+}
+function 04_kubectl_create_file () {
+	desc "Create from file"
+	hide "$(type 04_arrange | sed '1,3d;$d' | sed 's/^ *//g')"
+	show "$(type 04_act | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 04_assert | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 04_destroy | sed '1,3d;$d' | sed 's/^ *//g')"
+    
 }
 
-function 05_kubectl_create_parameters {
-	demoheader "Create using parameters"
-    demofocus "kubectl create clusterrole pod-reader --verb=get,list,watch --resource=pods"
+#####################################################################
+
+function 05_arrange () { : ; }
+function 05_act {
+	kubectl create clusterrole pod-reader --verb=get,list,watch --resource=pods
+}
+function 05_assert () {
 	kubectl get clusterroles | grep --color=auto pod-reader
+}
+function 05_destroy () {
 	kubectl delete clusterrole pod-reader
-	demoend
+}
+function 05_kubectl_create_parameters {
+	desc "Create using parameters"
+	hide "$(type 05_arrange | sed '1,3d;$d' | sed 's/^ *//g')"
+	show "$(type 05_act | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 05_assert | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 05_destroy | sed '1,3d;$d' | sed 's/^ *//g')"
 }
 
-function 06_kubectl_get {
-	demoheader "Get resources"
-    kubectl create -f "$dir_path"/get.yaml
+#####################################################################
+
+function 06_arrange () {
+	kubectl create -f rel_dir/get.yaml
+}
+function 06_act {
 	x=0
 	while [ $x != "3" ]
 	do
@@ -68,42 +138,112 @@ function 06_kubectl_get {
 		kubectl get deployments
 		sleep 2
 	done
-    demofocus "kubectl get deployments"
-    demofocus "kubectl get replicasets"
-    demofocus "kubectl get pods"
-    demofocus "kubectl get services"
-	kubectl delete -f "$dir_path"/get.yaml
-	demoend
+}
+function 06_assert () {
+	kubectl get deployments
+	kubectl get replicasets
+	kubectl get pods
+	kubectl get services
+}
+function 06_destroy () {
+	kubectl delete -f rel_dir/get.yaml
+}
+function 06_kubectl_get {
+	desc "Get resources"
+	hide "$(type 06_arrange | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 06_act | sed '1,3d;$d' | sed 's/^ *//g')"
+	show "$(type 06_assert | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 06_destroy | sed '1,3d;$d' | sed 's/^ *//g')"
 }
 
-function 07_kubectl_apiresources {
-	demoheader "View api resources that are available"
-    demofocus "kubectl api-resources"
+#####################################################################
+
+function 07_arrange () { : ; }
+function 07_act () { 
+	kubectl api-resources
+}
+function 07_assert () {
 	kubectl api-resources | grep --color=auto deployments
 	kubectl api-resources | grep --color=auto replicasets
 	kubectl api-resources | grep --color=auto pods
 	kubectl api-resources | grep --color=auto services
-	demoend
+}
+function 07_destroy () { : ; }
+function 07_kubectl_apiresources {
+	desc "View api resources that are available"
+	hide "$(type 07_arrange | sed '1,3d;$d' | sed 's/^ *//g')"
+	show "$(type 07_act | sed '1,3d;$d' | sed 's/^ *//g')"
+	show "$(type 07_assert | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 07_destroy | sed '1,3d;$d' | sed 's/^ *//g')"
 }
 
+#####################################################################
+
+function 08_arrange () { : ; }
+function 08_act () { : ; }
+function 08_assert () { 
+	kubectl api-versions
+}
+function 08_destroy () { : ; }
 function 08_kubectl_apiversions {
-	demoheader "View api versions of resources"
-    demofocus "kubectl api-versions"
-	demoend
+	desc "View api versions of resources"
+	hide "$(type 08_arrange | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 08_act | sed '1,3d;$d' | sed 's/^ *//g')"
+	show "$(type 08_assert | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 08_destroy | sed '1,3d;$d' | sed 's/^ *//g')"
 }
 
+#####################################################################
+
+function 09_arrange () { : ; }
+function 09_act () { : ; }
+function 09_assert () { 
+	kubectl explain deployments
+    kubectl explain deployments.spec
+    kubectl explain deployments.spec.replicas
+    kubectl explain pods
+    kubectl explain pods.spec
+ }
+function 09_destroy () { : ; }
 function 09_kubectl_explain {
-	demoheader "Explain what the resources are"
-    demofocus "kubectl explain deployments"
-    demofocus "kubectl explain deployments.spec"
-    demofocus "kubectl explain deployments.spec.replicas"
-    demofocus "kubectl explain pods"
-    demofocus "kubectl explain pods.spec"
+	desc "Explain what the resources are"
+	hide "$(type 09_arrange | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 09_act | sed '1,3d;$d' | sed 's/^ *//g')"
+	show "$(type 09_assert | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 09_destroy | sed '1,3d;$d' | sed 's/^ *//g')"
 }
 
+#####################################################################
+
+function 10_arrange () { 
+	kubectl create -f rel_dir/nginx.yaml
+	x=0
+	while [ $x != "true" ]
+	do
+		x="$(kubectl get pod pod-demo -o custom-columns=READY:.status.containerStatuses[0].ready | sed -n 2p)"
+		kubectl get pod pod-demo
+		sleep 2
+	done
+ }
+function 10_act () {
+	< rel_dir/nginx.yaml kubectl delete -f -
+}
+function 10_assert () {
+	kubectl get pod pod-demo
+}
+function 10_destroy () { : ; }
 function 10_kubectl_delete_stdin {
-	demoheader "Delete using stdin"
-	kubectl create -f "$dir_path"/nginx.yaml
+	desc "Delete using stdin"
+	hide "$(type 10_arrange | sed '1,3d;$d' | sed 's/^ *//g')"
+	show "$(type 10_act | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 10_assert | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 10_destroy | sed '1,3d;$d' | sed 's/^ *//g')"
+}
+
+#####################################################################
+
+function 11_arrange () {
+	kubectl create -f rel_dir/nginx.yaml
 	x=0
 	while [ $x != "true" ]
 	do
@@ -111,13 +251,24 @@ function 10_kubectl_delete_stdin {
 		kubectl get pod pod-demo
 		sleep 2
 	done
-    demofocus "cat $dir_path/nginx.yaml | kubectl delete -f -"
-	demoend
 }
-
+function 11_act () { 
+	kubectl delete -f rel_dir/nginx.yaml
+}
+function 11_assert () { : ; }
+function 11_destroy () { : ; }
 function 11_kubectl_delete_file {
-	demoheader "Delete using a file"
-	kubectl create -f "$dir_path"/nginx.yaml
+	desc "Delete using a file"
+	hide "$(type 11_arrange | sed '1,3d;$d' | sed 's/^ *//g')"
+	show "$(type 11_act | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 11_assert | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 11_destroy | sed '1,3d;$d' | sed 's/^ *//g')"
+}
+
+#####################################################################
+
+function 12_arrange () {
+	kubectl create -f rel_dir/nginx.yaml
 	x=0
 	while [ $x != "true" ]
 	do
@@ -125,13 +276,25 @@ function 11_kubectl_delete_file {
 		kubectl get pod pod-demo
 		sleep 2
 	done
-    demofocus "kubectl delete -f $dir_path/nginx.yaml"
-	demoend
 }
-
+function 12_act () {
+	kubectl delete pod pod-demo
+    kubectl delete service service-demo
+}
+function 12_assert () { : ; }
+function 12_destroy () { : ; }
 function 12_kubectl_delete_resource_name {
-	demoheader "Delete using a resource and its name"
-	kubectl create -f "$dir_path"/nginx.yaml
+	desc "Delete using a resource and its name"
+	hide "$(type 12_arrange | sed '1,3d;$d' | sed 's/^ *//g')"
+	show "$(type 12_act | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 12_assert | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 12_destroy | sed '1,3d;$d' | sed 's/^ *//g')"
+}
+
+#####################################################################
+
+function 13_arrange () {
+	kubectl create -f rel_dir/nginx.yaml
 	x=0
 	while [ $x != "true" ]
 	do
@@ -139,14 +302,24 @@ function 12_kubectl_delete_resource_name {
 		kubectl get pod pod-demo
 		sleep 2
 	done
-    demofocus "kubectl delete pod pod-demo"
-    demofocus "kubectl delete service service-demo"
-	demoend
 }
-
+function 13_act () {
+	kubectl delete pods,services -l app=nginx
+}
+function 13_assert () { : ; }
+function 13_destroy () { : ; }
 function 13_kubectl_delete_label {
-	demoheader "Delete using labels"
-	kubectl create -f "$dir_path"/nginx.yaml
+	desc "Delete using labels"
+	hide "$(type 13_arrange | sed '1,3d;$d' | sed 's/^ *//g')"
+	show "$(type 13_act | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 13_assert | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 13_destroy | sed '1,3d;$d' | sed 's/^ *//g')"
+}
+
+#####################################################################
+
+function 14_arrange () {
+	kubectl create -f rel_dir/nginx.yaml
 	x=0
 	while [ $x != "true" ]
 	do
@@ -154,13 +327,25 @@ function 13_kubectl_delete_label {
 		kubectl get pod pod-demo
 		sleep 2
 	done
-    demofocus "kubectl delete pods,services -l app=nginx"
-	demoend
 }
-
+function 14_act () {
+	kubectl delete pod pod-demo --now
+	kubectl delete service service-demo --now
+}
+function 14_assert () { : ; }
+function 14_destroy () { : ; }
 function 14_kubectl_delete_minimal {
-	demoheader "Delete in minimal time"
-	kubectl create -f "$dir_path"/nginx.yaml
+	desc "Delete in minimal time"
+	hide "$(type 14_arrange | sed '1,3d;$d' | sed 's/^ *//g')"
+	show "$(type 14_act | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 14_assert | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 14_destroy | sed '1,3d;$d' | sed 's/^ *//g')"
+}
+
+#####################################################################
+
+function 15_arrange () {
+	kubectl create -f rel_dir/nginx.yaml
 	x=0
 	while [ $x != "true" ]
 	do
@@ -168,29 +353,25 @@ function 14_kubectl_delete_minimal {
 		kubectl get pod pod-demo
 		sleep 2
 	done
-    demofocus "kubectl delete pod pod-demo --now"
-    demofocus "kubectl delete service service-demo --now"
-	demoend
 }
-
+function 15_act () {
+	kubectl delete pod pod-demo --force
+	kubectl delete service service-demo --force
+}
+function 15_assert () { : ; }
+function 15_destroy () { : ; }
 function 15_kubectl_delete_dead {
-	demoheader "Force deletion"
-	kubectl create -f "$dir_path"/nginx.yaml
-	x=0
-	while [ $x != "true" ]
-	do
-		x="$(kubectl get pod pod-demo -o custom-columns=READY:.status.containerStatuses[0].ready | sed -n 2p)"
-		kubectl get pod pod-demo
-		sleep 2
-	done
-    demofocus "kubectl delete pod pod-demo --force"
-    demofocus "kubectl delete service service-demo --force"
-	demoend
+	desc "Force deletion"
+	hide "$(type 15_arrange | sed '1,3d;$d' | sed 's/^ *//g')"
+	show "$(type 15_act | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 15_assert | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 15_destroy | sed '1,3d;$d' | sed 's/^ *//g')"
 }
 
-function 16_kubectl_delete_all {
-	demoheader "Delete all resources"
-	kubectl create -f "$dir_path"/pods.yaml
+#####################################################################
+
+function 16_arrange () { 
+	kubectl create -f rel_dir/pods.yaml
 	x=0
 	while [ $x != "true" ]
 	do
@@ -198,9 +379,21 @@ function 16_kubectl_delete_all {
 		kubectl get pods
 		sleep 2
 	done
-    demofocus "kubectl delete pods --all"
-	demoend
 }
+function 16_act () {
+	kubectl delete pods --all
+}
+function 16_assert () { : ; }
+function 16_destroy () { : ; }
+function 16_kubectl_delete_all {
+	desc "Delete all resources"
+	hide "$(type 16_arrange | sed '1,3d;$d' | sed 's/^ *//g')"
+	show "$(type 16_act | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 16_assert | sed '1,3d;$d' | sed 's/^ *//g')"
+	hide "$(type 16_destroy | sed '1,3d;$d' | sed 's/^ *//g')"
+}
+
+#####################################################################
 
 main() {
 	local cmd=$1
@@ -231,15 +424,15 @@ main() {
 		11_kubectl_delete_file
 	elif [[ $cmd == "12_kubectl_delete_resource_name" ]]; then
 		12_kubectl_delete_resource_name
-	elif [[ $cmd == "13_kubectl_delete_minimal" ]]; then
-		13_kubectl_delete_minimal
+	elif [[ $cmd == "13_kubectl_delete_label" ]]; then
+		13_kubectl_delete_label
 	elif [[ $cmd == "14_kubectl_delete_minimal" ]]; then
 		14_kubectl_delete_minimal
 	elif [[ $cmd == "15_kubectl_delete_dead" ]]; then
 		15_kubectl_delete_dead
 	elif [[ $cmd == "16_kubectl_delete_all" ]]; then
 		16_kubectl_delete_all
-	else
+	elif [[ $cmd == "all" || $cmd == "" ]]; then
 		00_kubectl
 		01_kubectl_version
 		02_kubectl_clusterinfo
@@ -257,6 +450,8 @@ main() {
 		14_kubectl_delete_minimal
 		15_kubectl_delete_dead
 		16_kubectl_delete_all
+	else
+		error "Unable to find function $cmd"
 	fi
 }
 
