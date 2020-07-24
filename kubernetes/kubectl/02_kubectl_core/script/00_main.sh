@@ -18,34 +18,34 @@ function run {
 }
 
 function run-walkthrough {
-	# intro "View the help output for kubectl, these are the commands we'll be looking at today"
-    # "$dir_path"/02_kubectl.sh 00_kubectl
-	# intro "Print the client and server version information"
-    # "$dir_path"/02_kubectl.sh 01_kubectl_version
-	# intro "Display cluster info"
-    # "$dir_path"/02_kubectl.sh 02_kubectl_clusterinfo
-	# intro "Create a resource from stdin"
-    # "$dir_path"/02_kubectl.sh 03_kubectl_create_stdin
-	# intro "Create a resource from a file"
-    # "$dir_path"/02_kubectl.sh 04_kubectl_create_file
-	# intro "Create a resource using parameters"
-    # "$dir_path"/02_kubectl.sh 05_kubectl_create_parameters
-	# intro "Display one or many resources"
-    # "$dir_path"/02_kubectl.sh 06_kubectl_get
-	# intro "Print the supported API resources on the server"
-    # "$dir_path"/02_kubectl.sh 07_kubectl_apiresources
-	# intro "Print the supported API versions on the server, in the form of 'group/version'"
-    # "$dir_path"/02_kubectl.sh 08_kubectl_apiversions
-	# intro "Documentation of resources"
-    # "$dir_path"/02_kubectl.sh 09_kubectl_explain
-	# intro "Create a resource from stdin"
-    # "$dir_path"/02_kubectl.sh 10_kubectl_delete_stdin
-	# intro "Create a resource from a file"
-    # "$dir_path"/02_kubectl.sh 11_kubectl_delete_file
-	# intro "Create a resource using resource and name"
-    # "$dir_path"/02_kubectl.sh 12_kubectl_delete_resource_name
-	# intro "Create a resources using labels"
-    # "$dir_path"/02_kubectl.sh 13_kubectl_delete_label
+	intro "View the help output for kubectl, these are the commands we'll be looking at today"
+    "$dir_path"/02_kubectl.sh 00_kubectl
+	intro "Print the client and server version information"
+    "$dir_path"/02_kubectl.sh 01_kubectl_version
+	intro "Display cluster info"
+    "$dir_path"/02_kubectl.sh 02_kubectl_clusterinfo
+	intro "Create a resource from stdin"
+    "$dir_path"/02_kubectl.sh 03_kubectl_create_stdin
+	intro "Create a resource from a file"
+    "$dir_path"/02_kubectl.sh 04_kubectl_create_file
+	intro "Create a resource using parameters"
+    "$dir_path"/02_kubectl.sh 05_kubectl_create_parameters
+	intro "Display one or many resources"
+    "$dir_path"/02_kubectl.sh 06_kubectl_get
+	intro "Print the supported API resources on the server"
+    "$dir_path"/02_kubectl.sh 07_kubectl_apiresources
+	intro "Print the supported API versions on the server, in the form of 'group/version'"
+    "$dir_path"/02_kubectl.sh 08_kubectl_apiversions
+	intro "Documentation of resources"
+    "$dir_path"/02_kubectl.sh 09_kubectl_explain
+	intro "Create a resource from stdin"
+    "$dir_path"/02_kubectl.sh 10_kubectl_delete_stdin
+	intro "Create a resource from a file"
+    "$dir_path"/02_kubectl.sh 11_kubectl_delete_file
+	intro "Create a resource using resource and name"
+    "$dir_path"/02_kubectl.sh 12_kubectl_delete_resource_name
+	intro "Create a resources using labels"
+    "$dir_path"/02_kubectl.sh 13_kubectl_delete_label
 	intro "Delete a resources in minimal time"
     "$dir_path"/02_kubectl.sh 14_kubectl_delete_minimal
 	intro "Delete a resources immediately"
