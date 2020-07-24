@@ -23,6 +23,19 @@ readonly timeout=$(if [ "$(uname)" == "Darwin" ]; then echo "1"; else echo "0.1"
 
 dir_path=$(dirname "$(realpath "$0")")
 
+function spin () {
+  spinner="/|\\-/|\\-"
+  while :
+  do
+    for i in `seq 0 7`
+    do
+      echo -n "${spinner:$i:1}"
+      echo -en "\010"
+      sleep 1
+    done
+  done
+}
+
 function intro() {
     clear
     echo "$darkblue$@$reset"
@@ -88,9 +101,13 @@ function show() {
 }
 
 function hide() {
+    spin &
+    SPIN_PID=$!
+    trap "kill -9 $SPIN_PID" `seq 0 15`
     cmd=${1//rel_dir/$dir_path}
     OFILE="$(mktemp -t $(basename $0).XXXXXX)"
     script -eq -c "$cmd"  >/dev/null  -f "$OFILE"
+    kill -9 $SPIN_PID
 }
 
 trap "echo" EXIT
