@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. "$(dirname ${BASH_SOURCE})/common.sh"
+. "/common/base.sh"
 
 function 00_minikube {
     show "minikube start -p kubectl-core"

@@ -36,7 +36,7 @@ function spin () {
   done
 }
 
-function automate() {
+function auto() {
     DEMO_RUN_FAST="true"
     DEMO_AUTO_RUN="true"
 }
