@@ -47,7 +47,7 @@ RUN curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/mi
 #  / _` |/ _ \ '_ ` _ \ / _ \/ __|
 # | (_| |  __/ | | | | | (_) \__ \
 #  \__,_|\___|_| |_| |_|\___/|___/
-                                
+
 COPY . /common/
 RUN mkdir /demos
 WORKDIR /demos
