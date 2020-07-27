@@ -1,9 +1,9 @@
 #!/bin/bash
 
-. "$(dirname ${BASH_SOURCE})/../../../../common.sh"
+. "$(dirname ${BASH_SOURCE})/common.sh"
 
 function 00_minikube {
-    run "minikube start -p kubectl-core"
+    show "minikube start -p kubectl-core"
 }
 
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. "$(dirname ${BASH_SOURCE})/../../../../common.sh"
+. "$(dirname ${BASH_SOURCE})/common.sh"
 
 dir_path=$(dirname "$(realpath "$0")")
 
@@ -11,6 +11,17 @@ function setup {
 function setup-walkthrough {
 	intro "Let's get started creating a cluster"
     setup
+}
+
+function install {
+	intro "Lets install kubectl"
+	show "curl -LO 'https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl'"
+	intro "Kubectl is a binary and we need to set the permissions to execute it"
+	show "chmod +x ./kubectl"
+	intro "Move kubectl to a bin directory so the binary is accessible"
+	show "mv ./kubectl /usr/local/bin/kubectl"
+	intro "Check to make sure it's been installed correctly"
+	show "kubectl version --client"
 }
 
 function run {
@@ -65,6 +76,7 @@ function cleanup {
 usage() {
 	echo -e "\\n\\tKubectl core\\n"
 	echo "Usage:"
+	echo "  install									- install required binaries for walkthrough"
 	echo "  setup                                   - run setup scripts"
 	echo "  setup-walkthrough                       - run setup scripts with explanation"
 	echo "  run                                     - run the exercise scripts"
@@ -81,7 +93,9 @@ main() {
 		exit 1
 	fi
 
-	if [[ $cmd == "setup" ]]; then
+	if [[ $cmd == "install" ]]; then
+		install
+	elif [[ $cmd == "setup" ]]; then
 		setup
 	elif [[ $cmd == "setup-walkthrough" ]]; then
 		setup-walkthrough

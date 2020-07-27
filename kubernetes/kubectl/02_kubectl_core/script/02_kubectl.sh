@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. "$(dirname ${BASH_SOURCE})/../../../../common.sh"
+. "$(dirname ${BASH_SOURCE})/common.sh"
 
 dir_path=$(dirname "$(realpath "$0")")
 
