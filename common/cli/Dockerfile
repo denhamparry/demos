@@ -23,4 +23,10 @@ RUN curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/mi
     chmod +x minikube && \
     mv minikube /usr/local/bin/
 
+COPY . /common/
+
+RUN mkdir /demos
+
+WORKDIR /demos
+
 ENTRYPOINT [ "/bin/bash" ]

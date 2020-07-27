@@ -27,32 +27,43 @@ function spin () {
   spinner="/|\\-/|\\-"
   while :
   do
-    for i in `seq 0 7`
+    for i in $(seq 0 7)
     do
       echo -n "${spinner:$i:1}"
-      echo -en "\010"
+      echo -en "\\010"
       sleep 1
     done
   done
 }
 
+function automate() {
+    DEMO_RUN_FAST="true"
+    DEMO_AUTO_RUN="true"
+}
+
+function demo() {
+    DEMO_RUN_FAST=
+    DEMO_AUTO_RUN=
+}
+
 function intro() {
+    started=""
     clear
-    echo "$darkblue$@$reset"
+    echo "$darkblue" "$@" "$reset"
 }
 
 function error() {
-    echo "$red$@$reset"
+    echo "$red" "$@" "$reset"
 }
 
 function desc() {
     maybe_first_prompt
-    echo "$blue# $@$reset"
+    echo "$blue #" "$@" "$reset"
     prompt
 }
 
 function prompt() {
-    echo -n "$yellow\$ $reset"
+    echo -n "$yellow\$" "$reset"
 }
 
 started=""
@@ -65,7 +76,7 @@ function maybe_first_prompt() {
 
 # After a `run` this variable will hold the stdout of the command that was run.
 # If the command was interactive, this will likely be garbage.
-DEMO_RUN_STDOUT=""
+# DEMO_RUN_STDOUT=""
 
 function show() {
     maybe_first_prompt
@@ -74,7 +85,7 @@ function show() {
     
     SAVEIFS=$IFS
     IFS=$'\n'
-    cmds=($cmd)
+    cmds=("$cmd")
     IFS=$SAVEIFS
 
     r=$?
@@ -82,20 +93,20 @@ function show() {
     do
         rate=25
         if [ -n "$DEMO_RUN_FAST" ]; then
-        rate=1000
+            rate=1000
         fi
         echo "$green${cmds[$i]}$reset" | pv -qL $rate
         if [ -n "$DEMO_RUN_FAST" ]; then
-        sleep 0.5
+            sleep 0.5
         fi
         OFILE="$(mktemp -t $(basename $0).XXXXXX)"
         script -eq -c "${cmds[$i]}" -f "$OFILE"
-        read -d '' -t "${timeout}" -n 10000 # clear stdin
+        read -r -d '' -t "${timeout}" -n 10000 # clear stdin
         prompt
         if [ -z "$DEMO_AUTO_RUN" ]; then
-        read -s
+            read -r -s
         fi
-        DEMO_RUN_STDOUT="$(tail -n +2 $OFILE | sed 's/\r//g')"
+        # DEMO_RUN_STDOUT="$(tail -n +2 $OFILE | sed 's/\r//g')"
     done
     return $r
 }
