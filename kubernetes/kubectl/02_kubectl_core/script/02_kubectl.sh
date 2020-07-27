@@ -1,6 +1,7 @@
 #!/bin/bash
 
-. "/common/base.sh"
+# shellcheck disable=SC1091
+source "/common/base.sh"
 
 #####################################################################
 

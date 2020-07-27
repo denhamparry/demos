@@ -99,7 +99,7 @@ function show() {
         if [ -n "$DEMO_RUN_FAST" ]; then
             sleep 0.5
         fi
-        OFILE="$(mktemp -t $(basename $0).XXXXXX)"
+        OFILE="$(mktemp -t "$(basename "$0")".XXXXXX)"
         script -eq -c "${cmds[$i]}" -f "$OFILE"
         read -r -d '' -t "${timeout}" -n 10000 # clear stdin
         prompt
@@ -114,9 +114,9 @@ function show() {
 function hide() {
     spin &
     SPIN_PID=$!
-    trap "kill -9 $SPIN_PID" `seq 0 15`
+    trap 'kill -9 $SPIN_PID' $(seq 0 15)
     cmd=${1//rel_dir/$dir_path}
-    OFILE="$(mktemp -t $(basename $0).XXXXXX)"
+        OFILE="$(mktemp -t "$(basename "$0")".XXXXXX)"
     script -eq -c "$cmd"  >/dev/null  -f "$OFILE"
     kill -9 $SPIN_PID
 }
