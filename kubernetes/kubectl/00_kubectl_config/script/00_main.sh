@@ -39,7 +39,7 @@ function run-walkthrough {
 }
 
 function demo {
-    docker run -it -v "$dir_path"/.asciinema/run_walkthrough.cast:/root/cast denhamparry/asciinema-client:latest
+    docker run -it -v "$dir_path"/.asciinema/01_config.cast:/root/cast denhamparry/asciinema-client:latest
 }
 
 usage() {
