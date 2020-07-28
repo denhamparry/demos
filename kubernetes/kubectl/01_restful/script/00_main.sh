@@ -1,79 +1,56 @@
 #!/bin/bash
 
+# shellcheck disable=SC1091
+source "/common/base.sh"
+
 dir_path=$(dirname "$(realpath "$0")")
 
-function setup {
-    "$dir_path"/01_setup.sh
+function install { : ;}
+
+function install-auto {
+    auto
+	install
 }
 
-function setup-walkthorugh {
-	clear
-	echo -e "\\n\\n"
-	echo -e "TODO"
-	read -r -n 1 -p "Press any key to continue..."
-	echo -e "\\n\\n"
-    "$dir_path"/01_setup.sh
+function install-walkthrough {
+    demo
+	install
 }
 
 function run {
-    "$dir_path"/02_curl.sh
+	intro "kubernetes (with curl) - view config"
+    "$dir_path"/01_curl.sh 00_run "$1"
+	intro "kubernetes (with curl) - curl cluster"
+    "$dir_path"/01_curl.sh 01_run "$1"
+	intro "kubernetes (with curl) - curl pods"
+    "$dir_path"/01_curl.sh 02_run "$1"
+	intro "kubernetes (with curl) - curl deployment"
+    "$dir_path"/01_curl.sh 03_run "$1"
+	intro "kubernetes (with curl) - curl post"
+    "$dir_path"/01_curl.sh 04_run "$1"
+	intro "kubernetes (with curl) - curl delete"
+    "$dir_path"/01_curl.sh 05_run "$1"
+}
+
+function run-auto {
+	run "auto"
 }
 
 function run-walkthrough {
-	clear
-	echo -e "\\n\\n"
-	echo -e "TODO"
-	read -r -n 1 -p "Press any key to continue..."
-	echo -e "\\n\\n"
-    "$dir_path"/02_curl.sh 00_view_config
-	echo -e "\\n\\n"
-	echo -e "TODO"
-	read -r -n 1 -p "Press any key to continue..."
-	echo -e "\\n\\n"
-    "$dir_path"/02_curl.sh 01_curl_cluster
-	echo -e "\\n\\n"
-	echo -e "TODO"
-	read -r -n 1 -p "Press any key to continue..."
-	echo -e "\\n\\n"
-    "$dir_path"/02_curl.sh 02_curl_pods
-	echo -e "\\n\\n"
-	echo -e "TODO"
-	read -r -n 1 -p "Press any key to continue..."
-	echo -e "\\n\\n"
-    "$dir_path"/02_curl.sh 03_curl_deployment
-	echo -e "\\n\\n"
-	echo -e "TODO"
-	read -r -n 1 -p "Press any key to continue..."
-	echo -e "\\n\\n"
-    "$dir_path"/02_curl.sh 04_curl_post
-	echo -e "\\n\\n"
-	echo -e "TODO"
-	read -r -n 1 -p "Press any key to continue..."
-	echo -e "\\n\\n"
-    "$dir_path"/02_curl.sh 05_curl_delete
-	echo -e "\\n\\n"
-	echo -e "TODO"
-	read -r -n 1 -p "Press any key to continue..."
-	echo -e "\\n\\n"
+	run "demo"
 }
-
 function demo {
     docker run -it -v "$dir_path"/.asciinema/run_walkthrough.cast:/root/cast denhamparry/asciinema-client:latest
 }
 
-function cleanup {
-    "$dir_path"/99_cleanup.sh
-}
-
 usage() {
-	echo -e "\\n\\tKubectl curl\\n"
+	echo -e "\\n\\tKubectl core\\n"
 	echo "Usage:"
-	echo "  setup                                   - run setup scripts"
-	echo "  setup-walkthrough                       - run setup scripts with explanation"
-	echo "  run                                     - run the exercise scripts"
+	echo "  install-auto							- install required binaries for walkthrough"
+	echo "  install-walkthrough						- install required binaries for walkthrough"
+	echo "  run-auto								- run the exercise scripts"
 	echo "  run-walkthrough                         - run the exercise scripts with explanation"
     echo "  demo                                    - view the demo without having to run setup"
-    echo "  cleanup                                 - reset enviroment"
 }
 
 main() {
@@ -84,18 +61,16 @@ main() {
 		exit 1
 	fi
 
-	if [[ $cmd == "setup" ]]; then
-		setup
-	elif [[ $cmd == "setup-walkthrough" ]]; then
-		setup-walkthrough
-	elif [[ $cmd == "run" ]]; then
-		run
+	if [[ $cmd == "install-auto" ]]; then
+		install-auto
+	elif [[ $cmd == "install-walkthrough" ]]; then
+		install-walkthrough
+	elif [[ $cmd == "run-auto" ]]; then
+		run-auto "$2"
 	elif [[ $cmd == "run-walkthrough" ]]; then
 		run-walkthrough
 	elif [[ $cmd == "demo" ]]; then
 		demo
-	elif [[ $cmd == "cleanup" ]]; then
-		cleanup
 	else
 		usage
 	fi

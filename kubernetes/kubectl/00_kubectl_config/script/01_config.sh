@@ -27,7 +27,6 @@ function 00_run {
 	desc " - current-context" "wait"
 }
 
-
 #####################################################################
 
 function 01_arrange () { : ; }
