@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y \
       curl \
       git \
       gnupg-agent \
+      jq \
       make \
       pv \
       software-properties-common \
