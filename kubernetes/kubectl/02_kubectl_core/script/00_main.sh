@@ -75,19 +75,14 @@ function demo {
     docker run -it -v "$dir_path"/.asciinema/run_walkthrough.cast:/root/cast denhamparry/asciinema-client:latest
 }
 
-function cleanup {
-    "$dir_path"/99_cleanup.sh
-}
-
 usage() {
 	echo -e "\\n\\tKubectl core\\n"
 	echo "Usage:"
-	echo "  install-auto						- install required binaries for walkthrough"
+	echo "  install-auto							- install required binaries for walkthrough"
 	echo "  install-walkthrough						- install required binaries for walkthrough"
-	echo "  run-auto							- run the exercise scripts"
+	echo "  run-auto								- run the exercise scripts"
 	echo "  run-walkthrough                         - run the exercise scripts with explanation"
     echo "  demo                                    - view the demo without having to run setup"
-    echo "  cleanup                                 - reset enviroment"
 }
 
 main() {
@@ -108,8 +103,6 @@ main() {
 		run-walkthrough
 	elif [[ $cmd == "demo" ]]; then
 		demo
-	elif [[ $cmd == "cleanup" ]]; then
-		cleanup
 	else
 		usage
 	fi
