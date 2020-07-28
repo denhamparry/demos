@@ -23,19 +23,6 @@ readonly timeout=$(if [ "$(uname)" == "Darwin" ]; then echo "1"; else echo "0.1"
 
 dir_path=$(dirname "$(realpath "$0")")
 
-function spin () {
-  spinner="/|\\-/|\\-"
-  while :
-  do
-    for i in $(seq 0 7)
-    do
-      echo -n "${spinner:$i:1}"
-      echo -en "\\010"
-      sleep 1
-    done
-  done
-}
-
 function auto() {
     DEMO_RUN_FAST="true"
     DEMO_AUTO_RUN="true"
@@ -47,7 +34,6 @@ function demo() {
 }
 
 function intro() {
-    started=""
     clear
     echo "$darkblue" "$@" "$reset"
 }
@@ -57,21 +43,15 @@ function error() {
 }
 
 function desc() {
-    maybe_first_prompt
-    echo "$blue #" "$@" "$reset"
-    prompt
+	local action=$2
+    echo "$blue #" "$1" "$reset"
+	if [[ $action == "wait" ]]; then
+        read -r -s
+	fi
 }
 
 function prompt() {
     echo -n "$yellow\$" "$reset"
-}
-
-started=""
-function maybe_first_prompt() {
-    if [ -z "$started" ]; then
-        prompt
-        started=true
-    fi
 }
 
 # After a `run` this variable will hold the stdout of the command that was run.
@@ -79,7 +59,10 @@ function maybe_first_prompt() {
 # DEMO_RUN_STDOUT=""
 
 function show() {
-    maybe_first_prompt
+    prompt
+    if [ -z "$DEMO_AUTO_RUN" ]; then
+        read -r -s
+    fi
     cmd=${1//rel_dir/$dir_path}
     
     
@@ -102,9 +85,10 @@ function show() {
         OFILE="$(mktemp -t "$(basename "$0")".XXXXXX)"
         script -eq -c "${cmds[$i]}" -f "$OFILE"
         read -r -d '' -t "${timeout}" -n 10000 # clear stdin
-        prompt
         if [ -z "$DEMO_AUTO_RUN" ]; then
+            prompt
             read -r -s
+            printf "\\n"
         fi
         # DEMO_RUN_STDOUT="$(tail -n +2 $OFILE | sed 's/\r//g')"
     done
@@ -112,13 +96,9 @@ function show() {
 }
 
 function hide() {
-    spin &
-    SPIN_PID=$!
-    trap 'kill -9 $SPIN_PID' $(seq 0 15)
     cmd=${1//rel_dir/$dir_path}
-        OFILE="$(mktemp -t "$(basename "$0")".XXXXXX)"
+    OFILE="$(mktemp -t "$(basename "$0")".XXXXXX)"
     script -eq -c "$cmd"  >/dev/null  -f "$OFILE"
-    kill -9 $SPIN_PID
 }
 
 trap "echo" EXIT
