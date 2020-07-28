@@ -19,15 +19,15 @@ function install-walkthrough {
 
 function run {
 	intro ".kube/config"
-    "$dir_path"/02_config.sh 00_run "$1"
+    "$dir_path"/01_config.sh 00_run "$1"
 	intro ".kube/config - Clusters"
-    "$dir_path"/02_config.sh 01_run "$1"
+    "$dir_path"/01_config.sh 01_run "$1"
 	intro ".kube/config - Users"
-    "$dir_path"/02_config.sh 02_run "$1"
+    "$dir_path"/01_config.sh 02_run "$1"
 	intro ".kube/config - Contexts"
-    "$dir_path"/02_config.sh 03_run "$1"
+    "$dir_path"/01_config.sh 03_run "$1"
 	intro ".kube/config - Current Context"
-    "$dir_path"/02_config.sh 04_run "$1"
+    "$dir_path"/01_config.sh 04_run "$1"
 }
 
 function run-auto {
