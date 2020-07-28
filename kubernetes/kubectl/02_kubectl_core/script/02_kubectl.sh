@@ -1,8 +1,7 @@
 #!/bin/bash
 
-. "$(dirname ${BASH_SOURCE})/../../../../common.sh"
-
-dir_path=$(dirname "$(realpath "$0")")
+# shellcheck disable=SC1091
+source "/common/base.sh"
 
 #####################################################################
 
@@ -397,6 +396,18 @@ function 16_kubectl_delete_all {
 
 main() {
 	local cmd=$1
+	local version=$2
+	
+	if [[ -z "$cmd" ]]; then
+		usage
+		exit 1
+	fi
+	
+	if [[ $version == "auto" ]]; then
+		auto
+	else
+		demo
+	fi
 
 	if [[ $cmd == "00_kubectl" ]]; then
 		00_kubectl

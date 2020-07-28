@@ -23,58 +23,52 @@ readonly timeout=$(if [ "$(uname)" == "Darwin" ]; then echo "1"; else echo "0.1"
 
 dir_path=$(dirname "$(realpath "$0")")
 
-function spin () {
-  spinner="/|\\-/|\\-"
-  while :
-  do
-    for i in `seq 0 7`
-    do
-      echo -n "${spinner:$i:1}"
-      echo -en "\010"
-      sleep 1
-    done
-  done
+function auto() {
+    DEMO_RUN_FAST="true"
+    DEMO_AUTO_RUN="true"
+}
+
+function demo() {
+    DEMO_RUN_FAST=
+    DEMO_AUTO_RUN=
 }
 
 function intro() {
     clear
-    echo "$darkblue$@$reset"
+    echo "$darkblue" "$@" "$reset"
 }
 
 function error() {
-    echo "$red$@$reset"
+    echo "$red" "$@" "$reset"
 }
 
 function desc() {
-    maybe_first_prompt
-    echo "$blue# $@$reset"
-    prompt
+	local action=$2
+    echo "$blue #" "$1" "$reset"
+	if [[ $action == "wait" ]]; then
+        read -r -s
+	fi
 }
 
 function prompt() {
-    echo -n "$yellow\$ $reset"
-}
-
-started=""
-function maybe_first_prompt() {
-    if [ -z "$started" ]; then
-        prompt
-        started=true
-    fi
+    echo -n "$yellow\$" "$reset"
 }
 
 # After a `run` this variable will hold the stdout of the command that was run.
 # If the command was interactive, this will likely be garbage.
-DEMO_RUN_STDOUT=""
+# DEMO_RUN_STDOUT=""
 
 function show() {
-    maybe_first_prompt
+    prompt
+    if [ -z "$DEMO_AUTO_RUN" ]; then
+        read -r -s
+    fi
     cmd=${1//rel_dir/$dir_path}
     
     
     SAVEIFS=$IFS
     IFS=$'\n'
-    cmds=($cmd)
+    cmds=("$cmd")
     IFS=$SAVEIFS
 
     r=$?
@@ -82,32 +76,29 @@ function show() {
     do
         rate=25
         if [ -n "$DEMO_RUN_FAST" ]; then
-        rate=1000
+            rate=1000
         fi
         echo "$green${cmds[$i]}$reset" | pv -qL $rate
         if [ -n "$DEMO_RUN_FAST" ]; then
-        sleep 0.5
+            sleep 0.5
         fi
-        OFILE="$(mktemp -t $(basename $0).XXXXXX)"
+        OFILE="$(mktemp -t "$(basename "$0")".XXXXXX)"
         script -eq -c "${cmds[$i]}" -f "$OFILE"
-        read -d '' -t "${timeout}" -n 10000 # clear stdin
-        prompt
+        read -r -d '' -t "${timeout}" -n 10000 # clear stdin
         if [ -z "$DEMO_AUTO_RUN" ]; then
-        read -s
+            prompt
+            read -r -s
+            printf "\\n"
         fi
-        DEMO_RUN_STDOUT="$(tail -n +2 $OFILE | sed 's/\r//g')"
+        # DEMO_RUN_STDOUT="$(tail -n +2 $OFILE | sed 's/\r//g')"
     done
     return $r
 }
 
 function hide() {
-    spin &
-    SPIN_PID=$!
-    trap "kill -9 $SPIN_PID" `seq 0 15`
     cmd=${1//rel_dir/$dir_path}
-    OFILE="$(mktemp -t $(basename $0).XXXXXX)"
+    OFILE="$(mktemp -t "$(basename "$0")".XXXXXX)"
     script -eq -c "$cmd"  >/dev/null  -f "$OFILE"
-    kill -9 $SPIN_PID
 }
 
 trap "echo" EXIT
