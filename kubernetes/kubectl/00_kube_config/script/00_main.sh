@@ -18,18 +18,16 @@ function install-walkthrough {
 }
 
 function run {
-	intro "kubernetes (with curl) - view config"
-    "$dir_path"/01_curl.sh 00_run "$1"
-	intro "kubernetes (with curl) - curl cluster"
-    "$dir_path"/01_curl.sh 01_run "$1"
-	intro "kubernetes (with curl) - curl pods"
-    "$dir_path"/01_curl.sh 02_run "$1"
-	intro "kubernetes (with curl) - curl deployment"
-    "$dir_path"/01_curl.sh 03_run "$1"
-	intro "kubernetes (with curl) - curl post"
-    "$dir_path"/01_curl.sh 04_run "$1"
-	intro "kubernetes (with curl) - curl delete"
-    "$dir_path"/01_curl.sh 05_run "$1"
+	intro ".kube/config"
+    "$dir_path"/01_config.sh 00_run "$1"
+	intro ".kube/config - Clusters"
+    "$dir_path"/01_config.sh 01_run "$1"
+	intro ".kube/config - Users"
+    "$dir_path"/01_config.sh 02_run "$1"
+	intro ".kube/config - Contexts"
+    "$dir_path"/01_config.sh 03_run "$1"
+	intro ".kube/config - Current Context"
+    "$dir_path"/01_config.sh 04_run "$1"
 }
 
 function run-auto {
@@ -38,9 +36,6 @@ function run-auto {
 
 function run-walkthrough {
 	run "demo"
-}
-function demo {
-    docker run -it -v "$dir_path"/.asciinema/run_walkthrough.cast:/root/cast controlplane/asciinema-client:latest
 }
 
 usage() {
